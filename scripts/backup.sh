@@ -1,7 +1,6 @@
 if ! [ -e "./backups" ]; then
   mkdir backups
-fi
-if [ -e "./backups/backup_$(date +%y_%m_%d_%H).tar.bz2" ]; then
+elif [ -e "./backups/backup_$(date +%y_%m_%d_%H).tar.bz2" ]; then
   rm ./backups/backup_$(date +%y_%m_%d_%H).tar.bz2
 fi
 echo Creating backup...

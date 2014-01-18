@@ -8,5 +8,5 @@ else
   echo "Spigot is not up to date, updating now..."
   ./scripts/backup.sh
   mv spigotnew.jar spigot.jar
-  echo "Updating completed"
+  echo "Update finished!"
 fi

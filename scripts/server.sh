@@ -1,6 +1,5 @@
 function SetMemory {
   read -p "Enter the Maximum memory usage for the server (in MBs): " MaxMemory
-  echo MaxMemory=$MaxMemory > ./scripts/vars
 }
 function Server {
   java -Xmx"$MaxMemory"M -Xms384M -XX:MaxPermSize=128M -jar spigot.jar nogui
@@ -35,12 +34,14 @@ function CheckMemory {
   elif [ $MaxMemory -gt $WarningMem ]; then
     echo "You've assigned most of your memory to the server."
     echo "Doing so could cause problems with other programs."
-    read -p "Would you like to adjust the amount of memory for the server? y/n " warnvar
+    read -n 1 -p "Would you like to adjust the amount of memory for the server? y/n " warnvar
+    echo " "
     if [ $warnvar = y ]; then
       SetMemory
       CheckMemory
     fi
   fi
+  echo MaxMemory=$MaxMemory > ./scripts/vars
 }
 until [ -e "./scripts/vars" ]; do
   SetMemory
