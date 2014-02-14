@@ -13,7 +13,7 @@ echo "Spigot is already up to date."
 else
 echo "Spigot is not up to date, updating now..."
   ./scripts/backup.sh
-#  mv spigotnew.jar spigot.jar
+  mv spigotnew.jar spigot.jar
   echo "Update finished!"
 fi
 
