@@ -2,10 +2,10 @@
 cd "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 if [ $DISPLAY ]; then
   if hash x-terminal-emulator 2>/dev/null; then
-    x-terminal-emulator -e ./scripts/main.sh
+    x-terminal-emulator -e bash ./script/main.sh
   else
-    ./scripts/main.sh
+    bash ./script/main.sh
   fi
 else
-  ./scripts/main.sh
+  bash ./script/main.sh
 fi
