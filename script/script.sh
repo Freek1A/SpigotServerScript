@@ -89,7 +89,7 @@ function Backup {
 }
 if ! [ -e "spigot.jar" ]; then
   echo "Spigot.jar not found, downloading now..."
-  wget http://ci.md-5.net/job/Spigot/lastSuccessfulBuild/artifact/Spigot-Server/target/spigot.ar -O ./spigot.jar
+  wget http://ci.md-5.net/job/Spigot/lastSuccessfulBuild/artifact/Spigot-Server/target/spigot.jar -O ./spigot.jar
   Download=spigot.jar
   clear
   CheckDownload
