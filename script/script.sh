@@ -1,11 +1,7 @@
 function UpdateServer {
   wget http://ci.md-5.net/job/Spigot/lastSuccessfulBuild/artifact/Spigot-Server/target/spigot.jar -O ./spigotnew.jar
-  if ! [ -s spigotnew.jar ]; then
-    echo Download failed!
-    echo Please check your internet connection.
-    rm spigotnew.jar
-    exit
-  fi
+  Download=spigotnew.jar
+  CheckDownload
   md5sumnew=`md5sum spigotnew.jar | cut -b-32`
   md5sumold=`md5sum spigot.jar | cut -b-32`
   if [ "$md5sumnew" = "$md5sumold" ]; then
@@ -16,6 +12,16 @@ function UpdateServer {
     Backup
     mv spigotnew.jar spigot.jar
     echo "Update finished!"
+  fi
+}
+function CheckDownload {
+  if ! [ -s $Download ]; then
+    echo Download failed!
+    echo Please check your internet connection.
+    rm $Download
+    CheckDL=1
+  else
+    CheckDL=0
   fi
 }
 function StartServer {
@@ -83,9 +89,18 @@ function Backup {
 }
 if ! [ -e "spigot.jar" ]; then
   echo "Spigot.jar not found, downloading now..."
-  wget http://ci.md-5.net/job/Spigot/lastSuccessfulBuild/artifact/Spigot-Server/target/spigot.jar -O ./spigot.jar
+  wget http://ci.md-5.net/job/Spigot/lastSuccessfulBuild/artifact/Spigot-Server/target/spigot.ar -O ./spigot.jar
+  Download=spigot.jar
+  clear
+  CheckDownload
+  if [ $CheckDL -eq 1 ]; then
+    echo "Consider trying to download it manually from http://ci.md-5.net/job/Spigot/"
+    sleep 2
+    echo "Stopping script"
+    sleep 2
+    exit
+  fi
 fi
-clear
 echo "Welcome!"
 echo "Please select one of the following options:"
 PS3='Enter the number of the service you want to start: '
