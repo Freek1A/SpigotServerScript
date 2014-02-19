@@ -102,24 +102,26 @@ if ! [ -e "spigot.jar" ]; then
   fi
 fi
 echo "Welcome!"
-echo "Please select one of the following options:"
-PS3='Enter the number of the service you want to start: '
-options=("Start Server" "Update Spigot" "Backup" "Quit")
-select opt in "${options[@]}"
-do
-  case $opt in
-    "Start Server")
-      echo "Starting the server..."
-      StartServer;;
-    "Update Spigot")
-      echo "Updating Spigot..."
-      UpdateServer;;
-    "Backup")
-      Backup
-      echo "Backup done!";;
-    "Quit")
-      break
-      ;;
-    *) echo "invalid option :(";;
-  esac
+until [ $((2+2)) -eq 5 ]; do
+  echo "Please select one of the following options:"
+  echo "1) Start Server"
+  echo "2) Update Spigot"
+  echo "3) Backup"
+  echo "4) Quit"
+  read -n 1 -p "Enter the number of the service you want to start: " MenuNum
+  echo " "
+  if [[ $MenuNum -eq 1 ]]; then
+    echo "Starting the server..."
+    StartServer
+  elif [[ $MenuNum -eq 2 ]]; then
+    echo "Updating Spigot..."
+    UpdateServer
+  elif [[ $MenuNum -eq 3 ]]; then
+    Backup
+    echo "Backup done!"
+  elif [[ $MenuNum -eq 4 ]]; then
+    exit
+  else
+    echo Invalid option
+  fi
 done
