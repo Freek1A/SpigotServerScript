@@ -1,24 +1,25 @@
 function UpdateServer {
   wget http://ci.md-5.net/job/Spigot/lastSuccessfulBuild/artifact/Spigot-Server/target/spigot.jar -O ./spigotnew.jar
-  Download=spigotnew.jar
-  CheckDownload
-  md5sumnew=`md5sum spigotnew.jar | cut -b-32`
-  md5sumold=`md5sum spigot.jar | cut -b-32`
-  if [ "$md5sumnew" = "$md5sumold" ]; then
-    echo "Spigot is already up to date."
-    rm spigotnew.jar
-  else
-    echo "Spigot is not up to date, updating now..."
-    Backup
-    mv spigotnew.jar spigot.jar
-    echo "Update finished!"
+  CheckDownload spigotnew.jar
+  if [ $CheckDL -eq 0 ]; then
+    md5sumnew=`md5sum spigotnew.jar | cut -b-32`
+    md5sumold=`md5sum spigot.jar | cut -b-32`
+    if [ "$md5sumnew" = "$md5sumold" ]; then
+      echo "Spigot is already up to date."
+      rm spigotnew.jar
+    else
+      echo "Spigot is not up to date, updating now..."
+      Backup
+      mv spigotnew.jar spigot.jar
+      echo "Update finished!"
+    fi
   fi
 }
-function CheckDownload {
-  if ! [ -s $Download ]; then
+function CheckDownload() {
+  if ! [ -s $1 ]; then
     echo Download failed!
     echo Please check your internet connection.
-    rm $Download
+    rm $1
     CheckDL=1
   else
     CheckDL=0
@@ -90,14 +91,13 @@ function Backup {
 if ! [ -e "spigot.jar" ]; then
   echo "Spigot.jar not found, downloading now..."
   wget http://ci.md-5.net/job/Spigot/lastSuccessfulBuild/artifact/Spigot-Server/target/spigot.jar -O ./spigot.jar
-  Download=spigot.jar
   clear
-  CheckDownload
+  CheckDownload spigot.jar
   if [ $CheckDL -eq 1 ]; then
     echo "Consider trying to download it manually from http://ci.md-5.net/job/Spigot/"
     sleep 2
     echo "Stopping script"
-    sleep 2
+    sleep 3
     exit
   fi
 fi
