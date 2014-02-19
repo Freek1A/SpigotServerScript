@@ -69,13 +69,13 @@ function StartServer {
         CheckMemory
       fi
     fi
-    echo MaxMemory=$MaxMemory > ./scriptdata/vars
+    echo MaxMemory=$MaxMemory > ./script/vars
   }
-  until [ -e "./scriptdata/vars" ]; do
+  until [ -e "./script/vars" ]; do
     SetMemory
     CheckMemory
   done
-  source ./scriptdata/vars
+  source ./script/vars
   Server
 }
 function Backup {
