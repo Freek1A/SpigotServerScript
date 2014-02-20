@@ -17,8 +17,8 @@ function UpdateServer {
 }
 function CheckDownload() {
   if ! [ -s $1 ]; then
-    echo Download failed!
-    echo Please check your internet connection.
+    echo "Download failed!"
+    echo "Please check your internet connection."
     rm $1
     CheckDL=1
   else
@@ -47,10 +47,15 @@ function StartServer {
     fi
   }
   function CheckMemory {
-    until [ $MaxMemory -gt 383 ]; do
-      echo "Amount of memory is too small (less than 384MB), please adjust it"
+    until [ "$MaxMemory" -eq "$MaxMemory" ] 2>/dev/null; do
+      echo "Invalid amount. (Numbers only)"
       SetMemory
     done
+    if [ $MaxMemory -lt 383 ]; then
+      echo "Amount of memory is too small (less than 384MB), please adjust it"
+      SetMemory
+      CheckMemory
+    fi
     TotalMem=$(($(free|awk '/^Mem:/{print $2}')/1024))
     WarningMem=$(($TotalMem-$TotalMem/8))
     if [ $MaxMemory -gt $TotalMem ]; then
@@ -60,7 +65,7 @@ function StartServer {
         CheckMemory
       done
     elif [ $MaxMemory -gt $WarningMem ]; then
-      echo "You've assigned most of your memory to the server."
+      echo "You've allocated most of your memory to the server."
       echo "Doing so could cause problems with other programs."
       read -n 1 -p "Would you like to adjust the amount of memory for the server? y/n " warnvar
       echo " "
@@ -84,7 +89,7 @@ function Backup {
   elif [ -e "./backups/backup_$(date +%y_%m_%d_%H).tar.bz2" ]; then
     rm ./backups/backup_$(date +%y_%m_%d_%H).tar.bz2
   fi
-  echo Creating backup...
+  echo "Creating backup..."
   tar --exclude=./backups -jcf ./backups/backup_$(date +%y_%m_%d_%H).tar.bz2 ./
   echo "Saved as: backup_$(date +%y_%m_%d_%H).tar.bz2 ($(($(stat -c '%s' ./backups/backup_$(date +%y_%m_%d_%H).tar.bz2)/1024)) KiB)"
 }
@@ -94,7 +99,7 @@ if ! [ -e "spigot.jar" ]; then
   clear
   CheckDownload spigot.jar
   if [ $CheckDL -eq 1 ]; then
-    echo "Consider trying to download it manually from http://ci.md-5.net/job/Spigot/"
+    echo "Try downloading it manually from http://ci.md-5.net/job/Spigot/"
     sleep 2
     echo "Stopping script"
     sleep 3
@@ -102,7 +107,7 @@ if ! [ -e "spigot.jar" ]; then
   fi
 fi
 echo "Welcome!"
-until [ $((2+2)) -eq 5 ]; do
+until [[ $MenuNum -eq 4 ]]; do
   echo "Please select one of the following options:"
   echo "1) Start Server"
   echo "2) Update Spigot"
@@ -119,9 +124,8 @@ until [ $((2+2)) -eq 5 ]; do
   elif [[ $MenuNum -eq 3 ]]; then
     Backup
     echo "Backup done!"
-  elif [[ $MenuNum -eq 4 ]]; then
-    exit
-  else
-    echo Invalid option
+  elif ! [[ $MenuNum -eq 4 ]]; then
+    echo "Invalid option"
+    sleep 0.4
   fi
 done
